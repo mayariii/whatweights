@@ -168,6 +168,7 @@
 			on:click={() => {
 				addedWeight = 0;
 				barWeight = 15;
+                targetWeight = barWeight;
 				addedPlates = [];
 				platesData.forEach((plate) => (plate.count = 0));
 			}}>empty bar</button>
@@ -254,7 +255,7 @@
 			class="text-sm bg-gray-200 rounded px-1 mb-20"
 			on:click={() => {
 				platesNeeded = [];
-				targetWeight = 15;
+				targetWeight = barWeight;
 				showPlatesNeeded = false;
 			}}>empty bar</button>
 	{/if}
