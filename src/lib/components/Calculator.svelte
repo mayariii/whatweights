@@ -48,8 +48,6 @@
 
 		return platesNeeded;
 	}
-
-	$: console.log(calculatePlatesNeeded());
 </script>
 
 <div class="mt-6 flex flex-col items-center gap-6">
