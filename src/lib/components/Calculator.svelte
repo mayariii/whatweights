@@ -1,7 +1,19 @@
+<script lang="ts" context="module">
+	export type Plate = {
+		weight: number;
+		size: string;
+		colour: string;
+		count: number;
+	};
+</script>
+
 <script lang="ts">
 	let barWeight = 15;
 	let addedWeight = 0;
-	let addedPlates: { colour: string; weight: number; size: string }[] = [];
+	let addedPlates: Plate[] = [];
+	let platesNeeded: Plate[] = [];
+	let targetWeight = 15;
+	let showPlatesNeeded = false;
 
 	$: addedPlates = [];
 	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
@@ -20,12 +32,30 @@
 		{ weight: 1, size: 'small', colour: 'bg-green-500', count: 0 },
 		{ weight: 0.5, size: 'small', colour: 'bg-white', count: 0 }
 	];
+
+	function calculatePlatesNeeded() {
+		let remainingWeight = (targetWeight - barWeight) / 2; // divide by 2 to distribute weight evenly on each side
+
+		platesData
+			.sort((a, b) => b.weight - a.weight)
+			.forEach((plate) => {
+				while (remainingWeight >= plate.weight) {
+					platesNeeded.push(plate);
+					remainingWeight -= plate.weight;
+				}
+			});
+
+		return platesNeeded;
+	}
+
+	$: console.log(calculatePlatesNeeded());
 </script>
 
 <div class="mt-6 flex flex-col items-center gap-6">
 	<div class="flex gap-0.5 items-center min-h-32 relative">
 		<div
-			class="h-1.5 w-[350px] md:w-[500px] bg-gray-400 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+			class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+			{barWeight}kg
 		</div>
 		<!-- left side -->
 		{#each addedPlates
@@ -78,7 +108,7 @@
 						platesData[platesData.indexOf(plate)].count += 2;
 						addedPlates = [
 							...addedPlates,
-							{ colour: plate.colour, weight: plate.weight, size: plate.size }
+							{ colour: plate.colour, weight: plate.weight, size: plate.size, count: 0 }
 						];
 					}}>
 					{plate.weight}
@@ -98,13 +128,23 @@
 			<p class="text-sm text-gray-500">change bar</p>
 			<div class="flex gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
 				<button
-					on:click={() => (barWeight = 15)}
+					on:click={() => {
+						barWeight = 15;
+						showPlatesNeeded = false;
+						targetWeight = 15;
+						platesNeeded = [];
+					}}
 					class:bg-indigo-600={barWeight === 15}
 					class:text-white={barWeight === 15}>
 					15kg
 				</button>
 				<button
-					on:click={() => (barWeight = 20)}
+					on:click={() => {
+						barWeight = 20;
+						showPlatesNeeded = false;
+						targetWeight = 15;
+						platesNeeded = [];
+					}}
 					class:bg-indigo-600={barWeight === 20}
 					class:text-white={barWeight === 20}>
 					20kg
@@ -129,6 +169,93 @@
 				barWeight = 15;
 				addedPlates = [];
 				platesData.forEach((plate) => (plate.count = 0));
-			}}>reset</button>
+			}}>empty bar</button>
+	{/if}
+
+	<div class="h-[1px] w-64 bg-gray-300" />
+
+	{#if !showPlatesNeeded}
+		<div class="flex flex-col gap-2">
+			<label for="target-weight" class="text-sm text-gray-500">enter a target weight</label>
+			<input
+				id="target-weight"
+				type="number"
+				min={15}
+				bind:value={targetWeight}
+				placeholder="15kg+"
+				class="text-center border rounded p-1 text-2xl font-semibold" />
+		</div>
+	{/if}
+
+	{#if targetWeight > 15 && !showPlatesNeeded}
+		<button
+			class="bg-indigo-600 text-white text-sm rounded-md p-1"
+			on:click={() => {
+				platesNeeded = calculatePlatesNeeded();
+				showPlatesNeeded = true;
+			}}>show plates needed</button>
+	{/if}
+
+	{#if showPlatesNeeded}
+		<div class="flex gap-0.5 items-center min-h-32 relative">
+			<div
+				class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+				{barWeight}kg
+			</div>
+			<!-- left side -->
+			{#each platesNeeded
+				.slice()
+				.sort((a, b) => b.weight - a.weight)
+				.reverse() as plate}
+				<div
+					class:h-32={plate.size === 'large'}
+					class:h-20={plate.size === 'medium'}
+					class:h-16={plate.size === 'small'}
+					class:w-6={plate.size === 'large'}
+					class:w-4={plate.size !== 'large'}
+					class={`${plate.colour} rounded z-10 text-xs border border-black flex items-center justify-center`}>
+					<p class:rotate-90={plate.size !== 'large'}>
+						{plate.weight}
+					</p>
+				</div>
+			{/each}
+
+			<div class="w-[100px] md:w-[200px]"></div>
+
+			<!-- right side -->
+			{#each platesNeeded.slice().sort((a, b) => b.weight - a.weight) as plate}
+				<div
+					class:h-32={plate.size === 'large'}
+					class:h-20={plate.size === 'medium'}
+					class:h-16={plate.size === 'small'}
+					class:w-6={plate.size === 'large'}
+					class:w-4={plate.size !== 'large'}
+					class={`${plate.colour} rounded z-10 text-xs border border-black flex items-center justify-center`}>
+					<p class:rotate-90={plate.size !== 'large'}>
+						{plate.weight}
+					</p>
+				</div>
+			{/each}
+		</div>
+	{/if}
+
+	{#if showPlatesNeeded}
+		<div class="flex flex-col items-center gap-1">
+			<p class="text-sm text-gray-500">plates for target weight of</p>
+			<p class="text-3xl font-semibold">
+				{targetWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
+			</p>
+		</div>
+	{/if}
+
+	<!-- reset button -->
+	{#if showPlatesNeeded}
+		<button
+			class="text-sm bg-gray-200 rounded px-1 mb-20"
+			on:click={() => {
+				platesNeeded = [];
+				targetWeight = 15;
+				showPlatesNeeded = false;
+			}}>empty bar</button>
 	{/if}
 </div>
