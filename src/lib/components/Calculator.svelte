@@ -69,7 +69,7 @@
 				class:h-16={plate.size === 'small'}
 				class:w-6={plate.size === 'large'}
 				class:w-4={plate.size !== 'large'}
-				class={`${plate.colour} rounded z-10 text-xs border border-black flex items-center justify-center`}>
+				class={`${plate.colour} rounded z-10 text-xs border border-gray-600 flex items-center justify-center`}>
 				<p class:rotate-90={plate.size !== 'large'}>
 					{plate.weight}
 				</p>
@@ -86,7 +86,7 @@
 				class:h-16={plate.size === 'small'}
 				class:w-6={plate.size === 'large'}
 				class:w-4={plate.size !== 'large'}
-				class={`${plate.colour} rounded z-10 text-xs border border-black flex items-center justify-center`}>
+				class={`${plate.colour} rounded z-10 text-xs border border-gray-600 flex items-center justify-center`}>
 				<p class:rotate-90={plate.size !== 'large'}>
 					{plate.weight}
 				</p>
@@ -99,7 +99,7 @@
 		<div class="flex items-center justify-center gap-2 flex-wrap max-w-[360px] md:max-w-[380px]">
 			{#each platesData as plate}
 				<button
-					class={`relative text-sm rounded-full border border-black ${plate.colour}`}
+					class={`relative text-sm rounded-full border border-gray-600 ${plate.colour}`}
 					class:size-20={plate.size === 'large'}
 					class:size-16={plate.size === 'medium'}
 					class:size-10={plate.size === 'small'}
@@ -214,7 +214,7 @@
 					class:h-16={plate.size === 'small'}
 					class:w-6={plate.size === 'large'}
 					class:w-4={plate.size !== 'large'}
-					class={`${plate.colour} rounded z-10 text-xs border border-black flex items-center justify-center`}>
+					class={`${plate.colour} rounded z-10 text-xs border border-gray-600 flex items-center justify-center`}>
 					<p class:rotate-90={plate.size !== 'large'}>
 						{plate.weight}
 					</p>
@@ -231,7 +231,7 @@
 					class:h-16={plate.size === 'small'}
 					class:w-6={plate.size === 'large'}
 					class:w-4={plate.size !== 'large'}
-					class={`${plate.colour} rounded z-10 text-xs border border-black flex items-center justify-center`}>
+					class={`${plate.colour} rounded z-10 text-xs border border-gray-600 flex items-center justify-center`}>
 					<p class:rotate-90={plate.size !== 'large'}>
 						{plate.weight}
 					</p>
