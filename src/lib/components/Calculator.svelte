@@ -252,7 +252,7 @@
 	<!-- reset button -->
 	{#if showPlatesNeeded}
 		<button
-			class="text-sm bg-gray-200 rounded px-1 mb-20"
+			class="text-sm bg-gray-200 rounded px-1 mb-10"
 			on:click={() => {
 				platesNeeded = [];
 				targetWeight = barWeight;
