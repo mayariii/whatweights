@@ -12,9 +12,10 @@
 	let addedWeight = 0;
 	let addedPlates: Plate[] = [];
 	let platesNeeded: Plate[] = [];
-	let targetWeight = 15;
+	let targetWeight = barWeight
 	let showPlatesNeeded = false;
 
+    $: minTargetWeight = barWeight;
 	$: addedPlates = [];
 	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
 	$: totalWeight = barWeight + addedWeight * 2;
@@ -131,7 +132,7 @@
 					on:click={() => {
 						barWeight = 15;
 						showPlatesNeeded = false;
-						targetWeight = 15;
+						targetWeight = barWeight;
 						platesNeeded = [];
 					}}
 					class:bg-indigo-600={barWeight === 15}
@@ -142,7 +143,7 @@
 					on:click={() => {
 						barWeight = 20;
 						showPlatesNeeded = false;
-						targetWeight = 15;
+						targetWeight = barWeight;
 						platesNeeded = [];
 					}}
 					class:bg-indigo-600={barWeight === 20}
@@ -180,14 +181,13 @@
 			<input
 				id="target-weight"
 				type="number"
-				min={15}
+				min={minTargetWeight}
 				bind:value={targetWeight}
-				placeholder="15kg+"
 				class="text-center border rounded p-1 text-2xl font-semibold" />
 		</div>
 	{/if}
 
-	{#if targetWeight > 15 && !showPlatesNeeded}
+	{#if targetWeight > minTargetWeight && !showPlatesNeeded}
 		<button
 			class="bg-indigo-600 text-white text-sm rounded-md p-1"
 			on:click={() => {
