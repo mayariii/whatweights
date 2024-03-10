@@ -21,32 +21,7 @@
 	];
 </script>
 
-<div class="mt-6 flex flex-col items-center gap-10">
-	<div class="flex flex-col items-center gap-2">
-		<div class="flex gap-4">
-			<div class="flex flex-col items-center gap-2">
-				<p class="text-sm text-gray-500">choose bar</p>
-				<div class="flex gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
-					<button
-						on:click={() => (barWeight = 15)}
-						class:bg-indigo-600={barWeight === 15}
-						class:text-white={barWeight === 15}
-					>
-						15kg
-					</button>
-					<button
-						on:click={() => (barWeight = 20)}
-						class:bg-indigo-600={barWeight === 20}
-						class:text-white={barWeight === 20}
-					>
-						20kg
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div>
+<div class="mt-6 flex flex-col items-center gap-6">
 		<div class="flex gap-0.5 items-center min-h-32 relative">
 			<div
 				class="h-1.5 w-[350px] md:w-[400px] bg-gray-400 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -84,7 +59,7 @@
 				</div>
 			{/each}
 		</div>
-	</div>
+
 
 	<div class="flex flex-col gap-2 items-center">
 		<p class="text-sm text-gray-500">add plates</p>
@@ -117,11 +92,33 @@
 		</div>
 	</div>
 
-	<div class="flex flex-col items-center gap-1">
-		<p class="text-sm text-gray-500">total weight</p>
-		<p class="text-5xl font-semibold">
-			{totalWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
-		</p>
+	<div class="flex gap-8">
+		<div class="flex flex-col items-center gap-2">
+			<p class="text-sm text-gray-500">change bar</p>
+			<div class="flex gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
+				<button
+					on:click={() => (barWeight = 15)}
+					class:bg-indigo-600={barWeight === 15}
+					class:text-white={barWeight === 15}
+				>
+					15kg
+				</button>
+				<button
+					on:click={() => (barWeight = 20)}
+					class:bg-indigo-600={barWeight === 20}
+					class:text-white={barWeight === 20}
+				>
+					20kg
+				</button>
+			</div>
+		</div>
+
+		<div class="flex flex-col items-center gap-1">
+			<p class="text-sm text-gray-500">total weight</p>
+			<p class="text-5xl font-semibold">
+				{totalWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
+			</p>
+		</div>
 	</div>
 
 	{#if addedWeight > 0}
