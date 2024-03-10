@@ -12,25 +12,25 @@
 	let addedWeight = 0;
 	let addedPlates: Plate[] = [];
 	let platesNeeded: Plate[] = [];
-	let targetWeight = barWeight
+	let targetWeight = barWeight;
 	let showPlatesNeeded = false;
 
-    $: minTargetWeight = barWeight;
+	$: minTargetWeight = barWeight;
 	$: addedPlates = [];
 	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
 	$: totalWeight = barWeight + addedWeight * 2;
 
 	let platesData = [
-		{ weight: 25, size: 'large', colour: 'bg-red-500', count: 0 },
-		{ weight: 20, size: 'large', colour: 'bg-blue-500', count: 0 },
-		{ weight: 15, size: 'large', colour: 'bg-yellow-500', count: 0 },
-		{ weight: 10, size: 'large', colour: 'bg-green-500', count: 0 },
+		{ weight: 25, size: 'large', colour: 'bg-red-600 text-white', count: 0 },
+		{ weight: 20, size: 'large', colour: 'bg-blue-700 text-white', count: 0 },
+		{ weight: 15, size: 'large', colour: 'bg-yellow-300', count: 0 },
+		{ weight: 10, size: 'large', colour: 'bg-green-600 text-white', count: 0 },
 		{ weight: 5, size: 'medium', colour: 'bg-white', count: 0 },
-		{ weight: 2.5, size: 'small', colour: 'bg-red-500', count: 0 },
-		{ weight: 2, size: 'small', colour: 'bg-blue-500', count: 0 },
-		{ weight: 1.5, size: 'small', colour: 'bg-yellow-500', count: 0 },
-		{ weight: 1.25, size: 'small', colour: 'bg-orange-500', count: 0 },
-		{ weight: 1, size: 'small', colour: 'bg-green-500', count: 0 },
+		{ weight: 2.5, size: 'small', colour: 'bg-red-600 text-white', count: 0 },
+		{ weight: 2, size: 'small', colour: 'bg-blue-700 text-white', count: 0 },
+		{ weight: 1.5, size: 'small', colour: 'bg-yellow-300', count: 0 },
+		{ weight: 1.25, size: 'small', colour: 'bg-orange-500 text-white', count: 0 },
+		{ weight: 1, size: 'small', colour: 'bg-green-600 text-white', count: 0 },
 		{ weight: 0.5, size: 'small', colour: 'bg-white', count: 0 }
 	];
 
@@ -99,7 +99,7 @@
 		<div class="flex items-center justify-center gap-2 flex-wrap max-w-[360px] md:max-w-[380px]">
 			{#each platesData as plate}
 				<button
-					class={`relative rounded-full border border-black ${plate.colour}`}
+					class={`relative text-sm rounded-full border border-black ${plate.colour}`}
 					class:size-20={plate.size === 'large'}
 					class:size-16={plate.size === 'medium'}
 					class:size-10={plate.size === 'small'}
@@ -168,7 +168,7 @@
 			on:click={() => {
 				addedWeight = 0;
 				barWeight = 15;
-                targetWeight = barWeight;
+				targetWeight = barWeight;
 				addedPlates = [];
 				platesData.forEach((plate) => (plate.count = 0));
 			}}>empty bar</button>
