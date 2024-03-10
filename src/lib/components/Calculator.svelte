@@ -257,6 +257,6 @@
 				platesNeeded = [];
 				targetWeight = barWeight;
 				showPlatesNeeded = false;
-			}}>empty bar</button>
+			}}>reset</button>
 	{/if}
 </div>
