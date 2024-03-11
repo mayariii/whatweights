@@ -58,11 +58,8 @@
 </script>
 
 <div class="mt-6 flex flex-col items-center gap-6">
+	<!-- barbell -->
 	<div class="flex gap-0.5 items-center min-h-32 relative">
-		<p
-			class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-			{barWeight}kg
-		</p>
 		<!-- left side -->
 		{#each addedPlates
 			.slice()
@@ -84,6 +81,11 @@
 		<!-- gap between weights -->
 		<div class="w-20 md:w-32" />
 
+		<p
+			class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+			{barWeight}kg
+		</p>
+
 		<!-- right side -->
 		{#each addedPlates.slice().sort((a, b) => b.weight - a.weight) as plate}
 			<div
@@ -100,6 +102,7 @@
 		{/each}
 	</div>
 
+	<!-- plate selection -->
 	<div class="flex flex-col gap-2 items-center">
 		<p class="text-sm text-gray-500">add plates</p>
 		<div class="flex items-center justify-center gap-2 flex-wrap max-w-[360px] md:max-w-[380px]">
@@ -131,6 +134,7 @@
 	</div>
 
 	<div class="flex gap-8">
+		<!-- bar weight selector -->
 		<div class="flex flex-col items-center gap-2">
 			<p class="text-sm text-gray-500">change bar</p>
 			<div class="flex gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
@@ -150,6 +154,7 @@
 			</div>
 		</div>
 
+		<!-- total weight -->
 		<div class="flex flex-col items-center gap-1">
 			<p class="text-sm text-gray-500">total weight</p>
 			<p class="text-5xl font-semibold">
@@ -166,6 +171,7 @@
 				addedWeight = 0;
 				barWeight = BAR_WEIGHTS[0];
 				targetWeight = barWeight;
+                unaccountedWeight = 0;
 				addedPlates = [];
 				platesData.forEach((plate) => (plate.count = 0));
 			}}>empty bar</button>
@@ -195,6 +201,7 @@
 	{/if}
 
 	{#if showPlatesNeeded}
+		<!-- barbell 2 -->
 		<div class="flex gap-0.5 items-center min-h-32 relative">
 			<div
 				class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -218,7 +225,8 @@
 				</div>
 			{/each}
 
-			<div class="w-[100px] md:w-[200px]"></div>
+			<!-- gap between weights -->
+			<div class="w-[100px] md:w-[200px]" />
 
 			<!-- right side -->
 			{#each platesNeeded.slice().sort((a, b) => b.weight - a.weight) as plate}
@@ -235,9 +243,7 @@
 				</div>
 			{/each}
 		</div>
-	{/if}
 
-	{#if showPlatesNeeded}
 		<div class="flex flex-col items-center gap-1">
 			<p class="text-sm text-gray-500">plates for target weight of</p>
 
@@ -246,7 +252,6 @@
 					{targetWeight - unaccountedWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal"
 						>kg</span>
 				</p>
-
 				<p class="text-xs text-gray-400">
 					remaining {unaccountedWeight.toFixed(1)}kg is unplateable
 				</p>
