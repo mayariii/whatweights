@@ -15,11 +15,6 @@
 	let targetWeight = barWeight;
 	let showPlatesNeeded = false;
 
-	$: minTargetWeight = barWeight;
-	$: addedPlates = [];
-	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
-	$: totalWeight = barWeight + addedWeight * 2;
-
 	let platesData = [
 		{ weight: 25, size: 'large', colour: 'bg-red-600 text-white', count: 0 },
 		{ weight: 20, size: 'large', colour: 'bg-blue-700 text-white', count: 0 },
@@ -33,6 +28,13 @@
 		{ weight: 1, size: 'small', colour: 'bg-green-600 text-white', count: 0 },
 		{ weight: 0.5, size: 'small', colour: 'bg-white', count: 0 }
 	];
+
+	const BAR_WEIGHTS = [15, 20, 7, 6.4];
+
+	$: minTargetWeight = barWeight;
+	$: addedPlates = [];
+	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
+	$: totalWeight = barWeight + addedWeight * 2;
 
 	function calculatePlatesNeeded() {
 		let remainingWeight = (targetWeight - barWeight) / 2; // divide by 2 to distribute weight evenly on each side
@@ -126,28 +128,19 @@
 		<div class="flex flex-col items-center gap-2">
 			<p class="text-sm text-gray-500">change bar</p>
 			<div class="flex gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
-				<button
-					on:click={() => {
-						barWeight = 15;
-						showPlatesNeeded = false;
-						targetWeight = barWeight;
-						platesNeeded = [];
-					}}
-					class:bg-indigo-600={barWeight === 15}
-					class:text-white={barWeight === 15}>
-					15kg
-				</button>
-				<button
-					on:click={() => {
-						barWeight = 20;
-						showPlatesNeeded = false;
-						targetWeight = barWeight;
-						platesNeeded = [];
-					}}
-					class:bg-indigo-600={barWeight === 20}
-					class:text-white={barWeight === 20}>
-					20kg
-				</button>
+				{#each BAR_WEIGHTS as weight}
+					<button
+						on:click={() => {
+							barWeight = weight;
+							showPlatesNeeded = false;
+							targetWeight = barWeight;
+							platesNeeded = [];
+						}}
+						class:bg-indigo-600={barWeight === weight}
+						class:text-white={barWeight === weight}>
+						{weight}kg
+					</button>
+				{/each}
 			</div>
 		</div>
 
@@ -165,7 +158,7 @@
 			class="text-sm bg-gray-200 rounded px-1"
 			on:click={() => {
 				addedWeight = 0;
-				barWeight = 15;
+				barWeight = BAR_WEIGHTS[0];
 				targetWeight = barWeight;
 				addedPlates = [];
 				platesData.forEach((plate) => (plate.count = 0));
