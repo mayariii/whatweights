@@ -3,16 +3,17 @@
 		weight: number;
 		size: string;
 		colour: string;
-		count: number;
+		count?: number;
 	};
 </script>
 
 <script lang="ts">
 	let barWeight = 15;
+	let targetWeight = barWeight;
 	let addedWeight = 0;
+	let unaccountedWeight = 0;
 	let addedPlates: Plate[] = [];
 	let platesNeeded: Plate[] = [];
-	let targetWeight = barWeight;
 	let showPlatesNeeded = false;
 
 	let platesData = [
@@ -48,16 +49,20 @@
 				}
 			});
 
+		// unaccountedWeight is the remaining weight that can't be made up by the plates
+		unaccountedWeight =
+			targetWeight - barWeight - platesNeeded.reduce((acc, plate) => acc + plate.weight, 0) * 2;
+
 		return platesNeeded;
 	}
 </script>
 
 <div class="mt-6 flex flex-col items-center gap-6">
 	<div class="flex gap-0.5 items-center min-h-32 relative">
-		<div
+		<p
 			class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 			{barWeight}kg
-		</div>
+		</p>
 		<!-- left side -->
 		{#each addedPlates
 			.slice()
@@ -76,7 +81,8 @@
 			</div>
 		{/each}
 
-		<div class="w-20 md:w-32"></div>
+		<!-- gap between weights -->
+		<div class="w-20 md:w-32" />
 
 		<!-- right side -->
 		{#each addedPlates.slice().sort((a, b) => b.weight - a.weight) as plate}
@@ -109,7 +115,7 @@
 						platesData[platesData.indexOf(plate)].count += 2;
 						addedPlates = [
 							...addedPlates,
-							{ colour: plate.colour, weight: plate.weight, size: plate.size, count: 0 }
+							{ colour: plate.colour, weight: plate.weight, size: plate.size }
 						];
 					}}>
 					{plate.weight}
@@ -234,9 +240,21 @@
 	{#if showPlatesNeeded}
 		<div class="flex flex-col items-center gap-1">
 			<p class="text-sm text-gray-500">plates for target weight of</p>
-			<p class="text-3xl font-semibold">
-				{targetWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
-			</p>
+
+			{#if unaccountedWeight}
+				<p class="text-3xl font-semibold">
+					{targetWeight - unaccountedWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal"
+						>kg</span>
+				</p>
+
+				<p class="text-xs text-gray-400">
+					remaining {unaccountedWeight.toFixed(1)}kg is unplateable
+				</p>
+			{:else}
+				<p class="text-3xl font-semibold">
+					{targetWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
+				</p>
+			{/if}
 		</div>
 	{/if}
 
