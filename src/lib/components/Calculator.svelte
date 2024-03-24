@@ -157,7 +157,7 @@
 		<!-- total weight -->
 		<div class="flex flex-col items-center gap-1">
 			<p class="text-sm text-gray-500">total weight</p>
-			<p class="text-5xl font-semibold">
+			<p class="text-5xl font-semibold tabular-nums">
 				{totalWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
 			</p>
 		</div>
