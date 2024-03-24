@@ -13,6 +13,19 @@
 		name="viewport"
 		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 	<meta
+		name="keywords"
+		content="Barbell Calculator, Weight Plate Calculator, Gym Workout Tools, Fitness Equipment Calculator, Barbell Plate Load, Workout Preparation App, Strength Training Assistant, Gym Training Aid" />
+
+	<meta
+		property="og:title"
+		content="WhatWeights: simplify your lifting session with our barbell calculator!" />
+	<meta property="og:url" content="https://www.whatweights.xyz" />
+
+	<meta
+		property="og:description"
+		content="Discover the quickest way to calculate barbell plates for your workout with WhatWeights. Spend less time setting up and more time lifting!" />
+
+	<meta
 		property="og:image"
 		content="https://firebasestorage.googleapis.com/v0/b/mayari-io.appspot.com/o/what-weights%2Fwhat-weights-OG.png?alt=media&token=513179ba-b9fd-4ae4-b908-acf1dc9b5553" />
 	<meta property="og:image:type" content="image/png" />

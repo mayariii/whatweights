@@ -30,7 +30,7 @@
 		{ weight: 0.5, size: 'small', colour: 'bg-white', count: 0 }
 	];
 
-	const BAR_WEIGHTS = [15, 20, 7, 6.4];
+	const BAR_WEIGHTS = [15, 20, 7, 6.4, 27];
 
 	$: minTargetWeight = barWeight;
 	$: addedPlates = [];
@@ -169,7 +169,7 @@
 			class="text-sm bg-gray-200 rounded px-1"
 			on:click={() => {
 				addedWeight = 0;
-                unaccountedWeight = 0;
+				unaccountedWeight = 0;
 				addedPlates = [];
 				platesData.forEach((plate) => (plate.count = 0));
 			}}>empty bar</button>
@@ -268,7 +268,7 @@
 			on:click={() => {
 				platesNeeded = [];
 				targetWeight = barWeight;
-                unaccountedWeight = 0;
+				unaccountedWeight = 0;
 				showPlatesNeeded = false;
 			}}>reset</button>
 	{/if}
