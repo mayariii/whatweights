@@ -133,11 +133,11 @@
 		</div>
 	</div>
 
-	<div class="flex gap-8">
+	<div class="flex gap-6">
 		<!-- bar weight selector -->
 		<div class="flex flex-col items-center gap-2">
 			<p class="text-sm text-gray-500">change bar</p>
-			<div class="flex gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
+			<div class="flex flex-wrap w-[150px] gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
 				{#each BAR_WEIGHTS as weight}
 					<button
 						on:click={() => {
