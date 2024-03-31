@@ -15,6 +15,7 @@
 	let addedPlates: Plate[] = [];
 	let platesNeeded: Plate[] = [];
 	let showPlatesNeeded = false;
+	let hasCompetitionCollars = false;
 
 	let platesData = [
 		{ weight: 25, size: 'large', colour: 'bg-red-600 text-white', count: 0 },
@@ -35,7 +36,7 @@
 	$: minTargetWeight = barWeight;
 	$: addedPlates = [];
 	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
-	$: totalWeight = barWeight + addedWeight * 2;
+	$: totalWeight = barWeight + addedWeight * 2 + (hasCompetitionCollars ? 5 : 0); // competition collars are 2.5kg each
 
 	function calculatePlatesNeeded() {
 		let remainingWeight = (targetWeight - barWeight) / 2; // divide by 2 to distribute weight evenly on each side
@@ -132,34 +133,49 @@
 			{/each}
 		</div>
 	</div>
+	<div class="flex flex-col gap-4">
+		<div class="flex gap-6">
+			<!-- bar weight selector -->
+			<div class="flex flex-col items-center justify-between gap-2">
+				<p class="text-sm text-gray-500">change bar</p>
+				<div
+					class="flex flex-wrap w-[150px] gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
+					{#each BAR_WEIGHTS as weight}
+						<button
+							on:click={() => {
+								barWeight = weight;
+								showPlatesNeeded = false;
+								targetWeight = barWeight;
+								platesNeeded = [];
+							}}
+							class:bg-indigo-600={barWeight === weight}
+							class:text-white={barWeight === weight}>
+							{weight}kg
+						</button>
+					{/each}
+				</div>
+			</div>
 
-	<div class="flex gap-6">
-		<!-- bar weight selector -->
-		<div class="flex flex-col items-center gap-2">
-			<p class="text-sm text-gray-500">change bar</p>
-			<div class="flex flex-wrap w-[150px] gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
-				{#each BAR_WEIGHTS as weight}
-					<button
-						on:click={() => {
-							barWeight = weight;
-							showPlatesNeeded = false;
-							targetWeight = barWeight;
-							platesNeeded = [];
-						}}
-						class:bg-indigo-600={barWeight === weight}
-						class:text-white={barWeight === weight}>
-						{weight}kg
-					</button>
-				{/each}
+			<!-- total weight -->
+			<div class="flex flex-col items-center gap-1">
+				<p class="text-sm text-gray-500">total weight</p>
+				<p class="text-5xl font-semibold tabular-nums">
+					{totalWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
+				</p>
 			</div>
 		</div>
 
-		<!-- total weight -->
-		<div class="flex flex-col items-center gap-1">
-			<p class="text-sm text-gray-500">total weight</p>
-			<p class="text-5xl font-semibold tabular-nums">
-				{totalWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
-			</p>
+		<!-- toggle 2.5kg competition collars -->
+		<div class="flex justify-center items-center gap-1">
+			<label for="competition-collars" class="text-xs text-gray-500"
+				>add competition collars (2.5kg each)</label>
+			<input
+				id="competition-collars"
+				type="checkbox"
+				class="size-4 rounded-full"
+				on:change={() => {
+					hasCompetitionCollars = !hasCompetitionCollars;
+				}} />
 		</div>
 	</div>
 
