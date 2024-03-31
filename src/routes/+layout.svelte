@@ -16,7 +16,7 @@
 	</main>
 
 	<footer class="flex flex-col gap-2 mt-auto justify-center items-center p-4">
-		<p class="text-xs text-gray-500">
+		<p class="text-xs text-gray-400">
 			made by maya | <a href="https://mayari.io" target="_blank" class="hover:text-indigo-500"
 				>mayari.io</a>
 		</p>
