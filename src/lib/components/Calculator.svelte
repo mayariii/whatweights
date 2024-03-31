@@ -32,15 +32,14 @@
 	];
 
 	const BAR_WEIGHTS = [15, 20, 7, 6.4, 27];
-
 	$: minTargetWeight = barWeight;
 	$: addedPlates = [];
 	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
 	$: totalWeight = barWeight + addedWeight * 2 + (hasCompetitionCollars ? 5 : 0); // competition collars are 2.5kg each
 
 	function calculatePlatesNeeded() {
-		let remainingWeight = (targetWeight - barWeight) / 2; // divide by 2 to distribute weight evenly on each side
-
+		// let remainingWeight = (targetWeight - barWeight) / 2;
+		let remainingWeight = (targetWeight - barWeight - (hasCompetitionCollars ? 5 : 0)) / 2; // divide by 2 to distribute weight evenly on each side
 		platesData
 			.sort((a, b) => b.weight - a.weight)
 			.forEach((plate) => {
@@ -52,7 +51,10 @@
 
 		// unaccountedWeight is the remaining weight that can't be made up by the plates
 		unaccountedWeight =
-			targetWeight - barWeight - platesNeeded.reduce((acc, plate) => acc + plate.weight, 0) * 2;
+			targetWeight -
+			barWeight -
+			platesNeeded.reduce((acc, plate) => acc + plate.weight, 0) * 2 -
+			(hasCompetitionCollars ? 5 : 0);
 
 		return platesNeeded;
 	}
@@ -61,6 +63,13 @@
 <div class="mt-6 flex flex-col items-center gap-6">
 	<!-- barbell -->
 	<div class="flex gap-0.5 items-center min-h-32 relative">
+		<!-- Competition collar left -->
+		{#if hasCompetitionCollars}
+			<div
+				class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
+				2.5kg
+			</div>
+		{/if}
 		<!-- left side -->
 		{#each addedPlates
 			.slice()
@@ -101,6 +110,14 @@
 				</p>
 			</div>
 		{/each}
+
+		<!-- Competition collar right -->
+		{#if hasCompetitionCollars}
+			<div
+				class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
+				2.5kg
+			</div>
+		{/if}
 	</div>
 
 	<!-- plate selection -->
@@ -167,14 +184,17 @@
 
 		<!-- toggle 2.5kg competition collars -->
 		<div class="flex justify-center items-center gap-1">
-			<label for="competition-collars" class="text-xs text-gray-500"
-				>add competition collars (2.5kg each)</label>
+			<label for="competition-collars" class="text-xs text-gray-500">add competition collars</label>
 			<input
 				id="competition-collars"
 				type="checkbox"
 				class="size-4 rounded-full"
+				bind:checked={hasCompetitionCollars}
 				on:change={() => {
-					hasCompetitionCollars = !hasCompetitionCollars;
+					platesNeeded = [];
+					targetWeight = barWeight;
+					unaccountedWeight = 0;
+					showPlatesNeeded = false;
 				}} />
 		</div>
 	</div>
@@ -217,6 +237,14 @@
 	{#if showPlatesNeeded}
 		<!-- barbell 2 -->
 		<div class="flex gap-0.5 items-center min-h-32 relative">
+			<!-- Competition collar left -->
+			{#if hasCompetitionCollars}
+				<div
+					class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
+					2.5kg
+				</div>
+			{/if}
+
 			<div
 				class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 				{barWeight}kg
@@ -256,6 +284,14 @@
 					</p>
 				</div>
 			{/each}
+
+			<!-- Competition collar right -->
+			{#if hasCompetitionCollars}
+				<div
+					class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
+					2.5kg
+				</div>
+			{/if}
 		</div>
 
 		<div class="flex flex-col items-center gap-1">
@@ -266,6 +302,11 @@
 					{targetWeight - unaccountedWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal"
 						>kg</span>
 				</p>
+
+				{#if hasCompetitionCollars}
+					<p class="text-xs text-gray-400">including 2.5kg competition collars</p>
+				{/if}
+
 				<p class="text-xs text-gray-400">
 					remaining {unaccountedWeight.toFixed(1)}kg is unplateable
 				</p>
@@ -273,6 +314,9 @@
 				<p class="text-3xl font-semibold">
 					{targetWeight}<span class="ml-0.5 text-gray-400 text-2xl font-normal">kg</span>
 				</p>
+				{#if hasCompetitionCollars}
+					<p class="text-xs text-gray-400">including 2.5kg competition collars</p>
+				{/if}
 			{/if}
 		</div>
 	{/if}
