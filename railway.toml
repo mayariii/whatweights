@@ -4,5 +4,5 @@ builder = "NIXPACKS"
 [deploy]
 buildCommand = "npm install -g pnpm && pnpm install && pnpm run build"
 startCommand = "npx serve build"
-healthcheckPath = "null"
+healthcheckPath = "/health"
 healthcheckTimeout = 100
