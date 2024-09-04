@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+buildCommand = "pnpm run build"
+startCommand = "npx serve build"
+healthcheckPath = "/"
+healthcheckTimeout = 100
