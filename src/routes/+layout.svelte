@@ -1,5 +1,12 @@
 <script>
 	import '../app.css';
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props} */
+	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -12,7 +19,9 @@
 
 <div class="h-screen w-full min-h-screen flex flex-col text-gray-700 bg-white">
 	<main>
-		<slot />
+		{#if children}
+			{@render children()}
+		{/if}
 	</main>
 
 	<footer class="flex flex-col gap-2 mt-auto justify-center items-center p-4">

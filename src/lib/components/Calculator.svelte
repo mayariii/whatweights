@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type Plate = {
 		weight: number;
 		size: string;
@@ -8,16 +8,31 @@
 </script>
 
 <script lang="ts">
-	let barWeight = 15;
-	let targetWeight = barWeight;
-	let addedWeight = 0;
-	let unaccountedWeight = 0;
-	let addedPlates: Plate[] = [];
-	let platesNeeded: Plate[] = [];
-	let showPlatesNeeded = false;
-	let hasCompetitionCollars = false;
+	const BAR_WEIGHTS = [15, 20, 7, 6.4, 27];
 
-	let platesData = [
+	let barWeight = $state(15);
+	let hasCompetitionCollars = $state(false);
+
+	let targetWeight = $state(15);
+	$effect(() => {
+		targetWeight = barWeight;
+	});
+
+	let addedWeight = $state(0);
+	let unaccountedWeight = $state(0);
+
+	let addedPlates: Plate[] = $state([]);
+	$effect(() => {
+		addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
+	});
+
+	let platesNeeded: Plate[] = $state([]);
+	let showPlatesNeeded = $state(false);
+
+	let minTargetWeight = $derived(barWeight);
+	let totalWeight = $derived(barWeight + addedWeight * 2 + (hasCompetitionCollars ? 5 : 0)); // competition collars are 2.5kg each
+
+	let platesData = $state([
 		{ weight: 25, size: 'large', colour: 'bg-red-600 text-white', count: 0 },
 		{ weight: 20, size: 'large', colour: 'bg-blue-700 text-white', count: 0 },
 		{ weight: 15, size: 'large', colour: 'bg-yellow-300', count: 0 },
@@ -29,16 +44,9 @@
 		{ weight: 1.25, size: 'small', colour: 'bg-orange-500 text-white', count: 0 },
 		{ weight: 1, size: 'small', colour: 'bg-green-600 text-white', count: 0 },
 		{ weight: 0.5, size: 'small', colour: 'bg-white', count: 0 }
-	];
-
-	const BAR_WEIGHTS = [15, 20, 7, 6.4, 27];
-	$: minTargetWeight = barWeight;
-	$: addedPlates = [];
-	$: addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
-	$: totalWeight = barWeight + addedWeight * 2 + (hasCompetitionCollars ? 5 : 0); // competition collars are 2.5kg each
+	]);
 
 	function calculatePlatesNeeded() {
-		// let remainingWeight = (targetWeight - barWeight) / 2;
 		let remainingWeight = (targetWeight - barWeight - (hasCompetitionCollars ? 5 : 0)) / 2; // divide by 2 to distribute weight evenly on each side
 		platesData
 			.sort((a, b) => b.weight - a.weight)
@@ -89,7 +97,7 @@
 		{/each}
 
 		<!-- gap between weights -->
-		<div class="w-20 md:w-32" />
+		<div class="w-20 md:w-32"></div>
 
 		<p
 			class="flex justify-center text-xs h-4 w-[350px] md:w-[500px] bg-gray-300 rounded absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -131,7 +139,7 @@
 					class:size-16={plate.size === 'medium'}
 					class:size-10={plate.size === 'small'}
 					aria-label={`add ${plate.weight}kg plates to bar`}
-					on:click={() => {
+					onclick={() => {
 						addedWeight = addedWeight + plate.weight;
 						platesData[platesData.indexOf(plate)].count += 2;
 						addedPlates = [
@@ -159,7 +167,7 @@
 					class="flex flex-wrap w-[150px] gap-1 justify-center *:border *:rounded-lg *:text-sm *:p-1">
 					{#each BAR_WEIGHTS as weight}
 						<button
-							on:click={() => {
+							onclick={() => {
 								barWeight = weight;
 								showPlatesNeeded = false;
 								targetWeight = barWeight;
@@ -190,7 +198,7 @@
 				type="checkbox"
 				class="size-4 rounded-full"
 				bind:checked={hasCompetitionCollars}
-				on:change={() => {
+				onchange={() => {
 					platesNeeded = [];
 					targetWeight = barWeight;
 					unaccountedWeight = 0;
@@ -203,7 +211,7 @@
 	{#if addedWeight > 0}
 		<button
 			class="text-sm bg-gray-200 rounded px-1"
-			on:click={() => {
+			onclick={() => {
 				addedWeight = 0;
 				unaccountedWeight = 0;
 				addedPlates = [];
@@ -211,7 +219,7 @@
 			}}>empty bar</button>
 	{/if}
 
-	<div class="h-[1px] w-64 bg-gray-300" />
+	<div class="h-[1px] w-64 bg-gray-300"></div>
 
 	{#if !showPlatesNeeded}
 		<div class="flex flex-col gap-2">
@@ -228,7 +236,7 @@
 	{#if targetWeight > minTargetWeight && !showPlatesNeeded}
 		<button
 			class="bg-indigo-600 text-white text-sm rounded-md p-1"
-			on:click={() => {
+			onclick={() => {
 				platesNeeded = calculatePlatesNeeded();
 				showPlatesNeeded = true;
 			}}>show plates needed</button>
@@ -268,7 +276,7 @@
 			{/each}
 
 			<!-- gap between weights -->
-			<div class="w-[100px] md:w-[200px]" />
+			<div class="w-[100px] md:w-[200px]"></div>
 
 			<!-- right side -->
 			{#each platesNeeded.slice().sort((a, b) => b.weight - a.weight) as plate}
@@ -325,7 +333,7 @@
 	{#if showPlatesNeeded}
 		<button
 			class="text-sm bg-gray-200 rounded px-1 mb-10"
-			on:click={() => {
+			onclick={() => {
 				platesNeeded = [];
 				targetWeight = barWeight;
 				unaccountedWeight = 0;
