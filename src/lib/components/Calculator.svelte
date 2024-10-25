@@ -10,28 +10,15 @@
 <script lang="ts">
 	const BAR_WEIGHTS = [15, 20, 7, 6.4, 27];
 
+	// $state is a new Svelte 5 feature for declaring reactive variables
 	let barWeight = $state(15);
 	let hasCompetitionCollars = $state(false);
-
 	let targetWeight = $state(15);
-	$effect(() => {
-		targetWeight = barWeight;
-	});
-
 	let addedWeight = $state(0);
 	let unaccountedWeight = $state(0);
-
 	let addedPlates: Plate[] = $state([]);
-	$effect(() => {
-		addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
-	});
-
 	let platesNeeded: Plate[] = $state([]);
 	let showPlatesNeeded = $state(false);
-
-	let minTargetWeight = $derived(barWeight);
-	let totalWeight = $derived(barWeight + addedWeight * 2 + (hasCompetitionCollars ? 5 : 0)); // competition collars are 2.5kg each
-
 	let platesData = $state([
 		{ weight: 25, size: 'large', colour: 'bg-red-600 text-white', count: 0 },
 		{ weight: 20, size: 'large', colour: 'bg-blue-700 text-white', count: 0 },
@@ -45,6 +32,24 @@
 		{ weight: 1, size: 'small', colour: 'bg-green-600 text-white', count: 0 },
 		{ weight: 0.5, size: 'small', colour: 'bg-white', count: 0 }
 	]);
+
+	// $derived is a new Svelte 5 feature for creating derived values
+	// It replaces the previous reactive declarations using $:
+	// It computes a new value based on other reactive values
+	// It memoizes the result, and only recomputes when dependencies change
+	let minTargetWeight = $derived(barWeight);
+	let totalWeight = $derived(barWeight + addedWeight * 2 + (hasCompetitionCollars ? 5 : 0));
+
+	// $effect is a new Svelte 5 feature for creating side effects
+	// It replaces the previous reactive statements using $:
+	// It executes its callback whenever any of it's dependencies change
+	$effect(() => {
+		targetWeight = barWeight;
+	});
+
+	$effect(() => {
+		addedWeight = addedPlates.reduce((acc, { weight }) => acc + weight, 0);
+	});
 
 	function calculatePlatesNeeded() {
 		let remainingWeight = (targetWeight - barWeight - (hasCompetitionCollars ? 5 : 0)) / 2; // divide by 2 to distribute weight evenly on each side
@@ -71,7 +76,7 @@
 <div class="mt-6 flex flex-col items-center gap-6">
 	<!-- barbell -->
 	<div class="flex gap-0.5 items-center min-h-32 relative">
-		<!-- Competition collar left -->
+		<!-- competition collar left -->
 		{#if hasCompetitionCollars}
 			<div
 				class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
@@ -119,7 +124,7 @@
 			</div>
 		{/each}
 
-		<!-- Competition collar right -->
+		<!-- competition collar right -->
 		{#if hasCompetitionCollars}
 			<div
 				class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
@@ -245,7 +250,7 @@
 	{#if showPlatesNeeded}
 		<!-- barbell 2 -->
 		<div class="flex gap-0.5 items-center min-h-32 relative">
-			<!-- Competition collar left -->
+			<!-- competition collar left -->
 			{#if hasCompetitionCollars}
 				<div
 					class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
@@ -293,7 +298,7 @@
 				</div>
 			{/each}
 
-			<!-- Competition collar right -->
+			<!-- competition collar right -->
 			{#if hasCompetitionCollars}
 				<div
 					class="w-10 h-6 rotate-90 flex items-center justify-center text-xs text-white bg-gray-500 z-20 rounded-md">
