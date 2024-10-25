@@ -97,11 +97,11 @@
 		{#each FAQS as { question, answer }}
 			<Accordion>
 				{#snippet head()}
-								<h2>{question}</h2>
-							{/snippet}
+					<h2>{question}</h2>
+				{/snippet}
 				{#snippet details()}
-								<p >{answer}</p>
-							{/snippet}
+					<p>{answer}</p>
+				{/snippet}
 			</Accordion>
 		{/each}
 	</div>

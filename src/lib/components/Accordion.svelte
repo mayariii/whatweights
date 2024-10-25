@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	
+
 	// Interface to type the component's props
 	interface Props {
 		open?: boolean;
