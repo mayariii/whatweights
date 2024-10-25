@@ -2,7 +2,7 @@
 	import Calculator from '$lib/components/Calculator.svelte';
 	import KoFi from '$lib/assets/ko-fi.png';
 	import Accordion from '$lib/components/Accordion.svelte';
-	let isKoFiOpen = false;
+	let isKoFiOpen = $state(false);
 
 	const FAQS = [
 		{
@@ -76,7 +76,7 @@
 	<Calculator />
 
 	<div class="flex flex-col gap-3 items-center mt-12">
-		<button on:click={() => (isKoFiOpen = !isKoFiOpen)}
+		<button onclick={() => (isKoFiOpen = !isKoFiOpen)}
 			><img src={KoFi} alt="Support me on kofi" class="w-52" /></button>
 		{#if isKoFiOpen}
 			<a href="https://ko-fi.com/mayariii" target="_blank" class="text-sm text-indigo-500"
@@ -87,7 +87,7 @@
 				style="border:none;width:100%;padding:4px;background:#f9f9f9;"
 				height="630"
 				title="mayariii"></iframe>
-			<button on:click={() => (isKoFiOpen = false)} class="text-sm">close</button>
+			<button onclick={() => (isKoFiOpen = false)} class="text-sm">close</button>
 		{/if}
 
 		<p class=" text-gray-400 text-xs text-center italic">feedback: hey@mayari.io</p>
@@ -96,8 +96,12 @@
 	<div class="mt-10 flex flex-col gap-2 w-[300px]">
 		{#each FAQS as { question, answer }}
 			<Accordion>
-				<h2 slot="head">{question}</h2>
-				<p slot="details">{answer}</p>
+				{#snippet head()}
+					<h2>{question}</h2>
+				{/snippet}
+				{#snippet details()}
+					<p>{answer}</p>
+				{/snippet}
 			</Accordion>
 		{/each}
 	</div>
